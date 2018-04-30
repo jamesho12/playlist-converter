@@ -56,7 +56,7 @@ section {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: calc(40vh - 46px);
+  min-height: calc(40vh - 46px);
   padding: 20px;
 }
 
@@ -68,11 +68,14 @@ h3 {
 }
 
 footer {
+  padding: 15px 20px;
+  background: #191414;
+}
+
+.fixed-footer {
   position: absolute;
   bottom: 0;
   width: 100vw;
-  padding: 15px 20px;
-  background: #191414;
 }
 
 footer p {
@@ -81,12 +84,8 @@ footer p {
   color: white;
 }
 
-#intro-screen {
+#intro-screen, #logged-screen {
   display: none;
-}
-
-#logged-screen {
-
 }
 
 form {
@@ -94,11 +93,21 @@ form {
 }
 
 ul {
+  margin-bottom: 15px;
   border: 1px solid #191414;
-  width: 30%;
+  width: 50%;
 }
 
-
 #youtube-list {
-  visibility: hidden;
+  display: none;
+}
+
+li {
+  display: flex;
+  padding: 10px;
+  align-items: center;
+}
+
+.video-label {
+  padding: 5px;
 }

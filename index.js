@@ -25,7 +25,7 @@ function initHTML() {
 
   if(!_token) {
     $('#login').text('Log In');
-    $('#login').attr('href', `https://accounts.spotify.com/authorize?client_id=${API_KEY}&response_type=token&redirect_uri=${CB_URL}`);
+    $('#login').attr('href', `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_API_KEY}&response_type=token&redirect_uri=${CB_URL}`);
     $('#intro-screen').css('display', 'flex');
   } else {
     token = _token;
@@ -55,16 +55,37 @@ function youtubeSearch() {
     console.log(getParameterByName('list'));
 
     const query = {
-      part: 'snippet, contentDetails',
+      part: 'snippet,contentDetails',
+      key: YOUTUBE_API_KEY,
+      maxResults: 10,
       playlistId: getParameterByName('list')
     }
 
-    $.getJSON(YOUTUBE_URL, showYoutubeList);
+    $.getJSON(YOUTUBE_URL, query, showYoutubeList)
+      .fail(function(error) {
+          console.log(error);
+    });
   });
 }
 
 function showYoutubeList(data) {
   console.log(data);
+  console.log(data.items.length);
+
+  for(let i=0; i<data.items.length; i++) {
+    $('#youtube-list').append(`
+      <li>
+        <div class="video-label">${i+1}</div>
+        <img src='${data.items[i].snippet.thumbnails.default.url}' alt="Youtube Thumbnail">
+        <div class="video-label">${data.items[i].snippet.title}</div>
+      </li>
+    `);
+    if(i < data.items.length-1)
+      $('#youtube-list').append('<hr>');
+  }
+
+  $('#youtube-list').css('display', 'block');
+  $('footer').removeClass('fixed-footer');
 }
 
 function search() {
@@ -104,7 +125,7 @@ function searchResults(data) {
 }
 
 function functionHandler() {
-  // initHTML();
+  initHTML();
   youtubeSearch();
 }
 
