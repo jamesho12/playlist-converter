@@ -80,3 +80,25 @@ footer p {
   text-align: center;
   color: white;
 }
+
+#intro-screen {
+  display: none;
+}
+
+#logged-screen {
+
+}
+
+form {
+  margin: 15px;
+}
+
+ul {
+  border: 1px solid #191414;
+  width: 30%;
+}
+
+
+#youtube-list {
+  visibility: hidden;
+}

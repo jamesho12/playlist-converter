@@ -6,36 +6,49 @@
     <link href="https://meyerweb.com/eric/tools/css/reset/reset.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Work+Sans:400,800" rel="stylesheet">
     <link href="index.css" rel="stylesheet" type="text/css" />
-    
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
     <title>Playlist Converter</title>
   </head>
   <body>
     <nav role="navigation">
       <header role="banner">
         <a href="#">
-          <h1>Playlist Converter</h1>  
+          <h1>Playlist Converter</h1>
         </a>
       </header>
-      <a href="#">Log In</a>
+      <a id="login" href="#"></a>
     </nav>
-    
+
     <div class="bg-wrapper">
       <h2>Convert your Youtube playlists into Spotify playlists</h2>
-    </div>  
-    
+    </div>
+
     <main role="main">
-      <section role="region">
+      <section id="intro-screen" role="region">
         <h3>
           How Does It Work?
         </h3>
         <p>Many users use Youtube as a platform to stream music. However, when switching platforms the tedious tasks of finding all your songs and adding them again is time consuming. This tool helps you transfer over your playlists from Youtube to Spotify with ease.</p>
-      </section>  
+      </section>
+
+      <section id="logged-screen" role="region">
+        <form id="youtube-search">
+          <input id="youtube-url" type="text" placeholder="Youtube playlist url..." required>
+          <button type="submit">Search</button>
+        </form>
+        <ul id="youtube-list">
+
+        </ul>
+      </section>
     </main>
-    
+
     <footer role="contentInfo">
       <p>Created by James Ho</p>
     </footer>
-    
+
+
     <script src="index.js"></script>
+  
   </body>
 </html>
