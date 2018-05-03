@@ -101,10 +101,7 @@ function showYoutubeList(data) {
     song_names.push(title);
   }
 
-  $('#youtube-list').css('display', 'block');
-
   spotifySearch(song_names[global_i]);
-  $('footer').removeClass('fixed-footer');
 }
 
 function spotifySearch(raw_song) {
@@ -154,7 +151,9 @@ function appendSpotifyList(data) {
   if(global_i < playlist_len-1) {
     $('#spotify-list').append('<hr>');
   } else {
+    $('#youtube-list').css('display', 'block');
     $('#spotify-list').css('display', 'block');
+    $('footer').removeClass('fixed-footer');
   }
 
   global_i++;
