@@ -7,6 +7,9 @@ const YOUTUBE_API_KEY = 'AIzaSyBgV3q8M71c-Hkqh3VmKzJSDlnoidrmuzM';
 const CB_URL = 'http%3A%2F%2F192.168.1.207%3A8000';
 
 let token = '';
+let song_names = [];
+let playlist_len = 0;
+let global_i = 0;
 
 function initHTML() {
   const hash = window.location.hash
@@ -70,58 +73,93 @@ function youtubeSearch() {
 
 function showYoutubeList(data) {
   console.log(data);
-  console.log(data.items.length);
 
-  for(let i=0; i<data.items.length; i++) {
+  $("li").remove();
+  $("hr").remove();
+
+  global_i = 0;
+  song_names = [];
+  playlist_len = data.items.length;
+  console.log(`The number of songs is ${playlist_len}`);
+
+  for(let i=0; i<playlist_len; i++) {
+    let title = data.items[i].snippet.title;
+    let thumbnail_url = data.items[i].snippet.thumbnails.default.url;
+
     $('#youtube-list').append(`
       <li>
-        <div class="video-label">${i+1}</div>
-        <img src='${data.items[i].snippet.thumbnails.default.url}' alt="Youtube Thumbnail">
-        <div class="video-label">${data.items[i].snippet.title}</div>
+        <div class="song-number">${i+1}</div>
+        <img class="thumbnail" src='${thumbnail_url}' alt="Youtube Thumbnail">
+        <div class="song-name">${title}</div>
+        <input type="checkbox">
       </li>
     `);
-    if(i < data.items.length-1)
+
+    if(i < playlist_len-1)
       $('#youtube-list').append('<hr>');
+
+    song_names.push(title);
   }
 
   $('#youtube-list').css('display', 'block');
+
+  spotifySearch(song_names[global_i]);
   $('footer').removeClass('fixed-footer');
 }
 
-function search() {
-  $('#spotify-search').submit(function(event) {
-      event.preventDefault();
+function spotifySearch(raw_song) {
+  let song = raw_song
+    .replace(/([\(|\[]Official(.*))/g, '')
+    .replace(/([\(|\[](.*))/g, '')
+    .replace('(Audio)', '');
+  console.log(song);
 
-      console.log($.ajax({
-      	url: `https://api.spotify.com/v1/search?q=${encodeURIComponent($('#search-input').val())}&type=track&limit=1`,
-      	dataType: 'json',
-      	beforeSend: function(xhr){
-      		xhr.setRequestHeader('Accept', 'application/json');
-      		xhr.setRequestHeader('Content-Type', 'application/json');
-      		xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-      	},
-      	success: searchResults
-      }).fail(function(error) {
-        // handle failed api requests
-        console.log(error);
-      }));
+  $.ajax({
+  	url: `https://api.spotify.com/v1/search?q=${encodeURIComponent(song)}&type=track&limit=1&offset=0`,
+  	dataType: 'json',
+  	beforeSend: function(xhr){
+  		xhr.setRequestHeader('Accept', 'application/json');
+  		xhr.setRequestHeader('Content-Type', 'application/json');
+  		xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+  	},
+  	success: appendSpotifyList
+  }).fail(function(error) {
+    // handle failed api requests
+    console.log(error);
   });
 }
 
-function searchResults(data) {
-  let url = data.tracks.items[0];
+function appendSpotifyList(data) {
   let json = JSON.stringify(data, null, '\t');
   console.log(data);
 
-  if(url)
-    $('#song-link').attr('href', data.tracks.items[0].external_urls.spotify);
+  let result = data.tracks.items[0];
+  let title = "";
+  let thumbnail_url = "";
 
-  $('#song-link').text('Link to song');
+  if(result) {
+    title = data.tracks.items[0].name;
+    thumbnail_url = data.tracks.items[0].album.images[1].url;
+  }
 
-  $('#json-results').text(json);
-  console.log(json);
+  $('#spotify-list').append(`
+    <li>
+      <div class="song-number">${global_i+1}</div>
+      <img class="thumbnail" src='${thumbnail_url}' alt="Spotify Thumbnail">
+      <div class="song-name">${title}</div>
+      <input type="checkbox">
+    </li>
+  `);
 
-  $('#search-input').val('');
+  if(global_i < playlist_len-1) {
+    $('#spotify-list').append('<hr>');
+  } else {
+    $('#spotify-list').css('display', 'block');
+  }
+
+  global_i++;
+  if(global_i < playlist_len)
+    spotifySearch(song_names[global_i]);
 }
 
 function functionHandler() {

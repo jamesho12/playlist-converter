@@ -15,7 +15,7 @@ nav {
   justify-content: space-between;
   align-items: center;
   height: 80px;
-  width: 100vw;
+  width: 100%;
   font-weight: 800;
   background: rgba(0, 0, 0, 0.6);
   color: white;
@@ -95,10 +95,10 @@ form {
 ul {
   margin-bottom: 15px;
   border: 1px solid #191414;
-  width: 50%;
+  width: 40%;
 }
 
-#youtube-list {
+#youtube-list, #spotify-list {
   display: none;
 }
 
@@ -110,4 +110,21 @@ li {
 
 .video-label {
   padding: 5px;
+}
+
+.song-number, .song-name {
+  padding: 5px;
+}
+
+.song-name {
+  width: 100%;
+}
+
+#playlists {
+  display: flex;
+  justify-content: space-around;
+}
+
+.thumbnail {
+  height: 90px;
 }
