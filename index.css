@@ -98,7 +98,7 @@ ul {
   width: 40%;
 }
 
-#youtube-list, #spotify-list {
+#youtube-list, #spotify-list, #spotify-export {
   display: none;
 }
 
@@ -116,6 +116,11 @@ li {
   padding: 5px;
 }
 
+.song-number {
+  min-width: 30px;
+  text-align: center;
+}
+
 .song-name {
   width: 100%;
 }
@@ -127,4 +132,8 @@ li {
 
 .thumbnail {
   height: 90px;
+}
+
+hr {
+  margin: 0;
 }
