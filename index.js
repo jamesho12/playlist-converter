@@ -107,7 +107,9 @@ function showYoutubeList(data) {
 
   global_i = 0;
   song_names = [];
+  spotify_obj = [];
   playlist_len = data.items.length;
+
   console.log(`The number of songs is ${playlist_len}`);
 
   for(let i=0; i<playlist_len; i++) {
@@ -119,7 +121,6 @@ function showYoutubeList(data) {
         <div class="song-number">${i+1}</div>
         <img class="thumbnail" src='${thumbnail_url}' alt="Youtube Thumbnail">
         <div class="song-name">${title}</div>
-        <input type="checkbox">
       </li>
     `);
 
@@ -136,7 +137,9 @@ function spotifySearch(raw_song) {
   let song = raw_song
     .replace(/([\(|\[]Official(.*))/g, '')
     .replace(/([\(|\[](.*))/g, '')
-    .replace('(Audio)', '');
+    .replace('(Audio)', '')
+    .replace(/(ft\.(.*))/g, '');
+    //.replace(/(Prod By(.*))/g, '');
   // console.log(song);
 
   $.ajax({
@@ -177,10 +180,11 @@ function appendSpotifyList(data) {
 
     $('#spotify-list').append(`
       <li>
+        <div></div>
         <div class="song-number">${global_i+1}</div>
         <img class="thumbnail" src='${spotify_obj[global_i].thumbnail_url}' alt="Spotify Album Thumbnail">
         <div class="song-name">${spotify_obj[global_i].name}</div>
-        <input type="checkbox">
+        <input data-index= ${global_i} type="checkbox" checked>
       </li>
     `);
   } else {
@@ -190,10 +194,10 @@ function appendSpotifyList(data) {
 
     $('#spotify-list').append(`
       <li>
+        <div class="invalid-overlay"></div>
         <div class="song-number">${global_i+1}</div>
-        <img class="thumbnail" src='${thumbnail_url}' alt="Invalid Album Cover">
+        <img class="thumbnail" src='images/no_image.jpg' alt="Invalid Album Cover">
         <div class="song-name">Invalid Song</div>
-        <input type="checkbox">
       </li>
     `);
   }
@@ -252,8 +256,10 @@ function getAllSongUri() {
   let uris = '';
 
   for(let i=0; i<playlist_len; i++) {
-    if(spotify_obj[i].valid ) {
-      if(i > 0)
+    console.log(spotify_obj[i].valid);
+
+    if(spotify_obj[i].valid) {
+      if(i > 0 && uris != '')
         uris += ',';
       uris += spotify_obj[i].uri;
     }
@@ -288,6 +294,15 @@ function completeConversion(data) {
   console.log(`Songs successfully added`);
 }
 
+function checkboxListener() {
+  $('ul').on('click', 'input', function(event) {
+    console.log($(this).attr('data-index'));
+    let index = parseInt($(this).attr('data-index'));
+    spotify_obj[index].valid = !spotify_obj[index].valid;
+    console.log(spotify_obj);    $(this).closest('li').find('div').first().toggleClass('invalid-overlay');
+  });
+}
+
 function functionHandler() {
   // This function handles what content is displayed based on if a user has
   // logged in or not
@@ -300,6 +315,10 @@ function functionHandler() {
   // This function creates an event listener that handles an API call to
   // create a spotify playlist and the export process
   createPlaylist();
+
+  // This function creates an event listener that handles selecting or
+  // deselecting a song from the playlist to be exported
+  checkboxListener();
 }
 
 $(functionHandler);
