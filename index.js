@@ -14,6 +14,16 @@ let spotify_obj = [];
 let playlist_len = 0;
 let global_i = 0;
 
+function reset() {
+  $("#playlists li").remove();
+  $("hr").remove();
+  $('#results-num').text('');
+
+  song_names = [];
+  spotify_obj = [];
+  global_i = 0;
+}
+
 function requestUserId(auth_token) {
   $.ajax({
   	url: `https://api.spotify.com/v1/me`,
@@ -66,6 +76,9 @@ function initHTML() {
     $('#login').attr('href', 'https://www.spotify.com/us/account/overview/');
     $('#login').attr('target', '_blank');
     $('#logged-screen').css('display', 'flex');
+    $('.bg-wrapper').css('height', '50vh');
+    $('h2').css('display','none');
+    $('.instructions').css('display','block');
   }
 }
 
@@ -94,7 +107,15 @@ function youtubeSearch() {
 
     $.getJSON(YOUTUBE_URL, query, showYoutubeList)
       .fail(function(error) {
-          console.log(error);
+        switch(error.status) {
+          case 403:
+            console.log('playlistItemsNotAccessible');
+            $('#youtube-error').text('Playlist cannot be accessed (private or watch later playlist)');
+            break;
+          case 404:
+            $('#youtube-error').text('Playlist not found');
+            break;
+        }
     });
   });
 }
@@ -102,12 +123,8 @@ function youtubeSearch() {
 function showYoutubeList(data) {
   console.log(data);
 
-  $("li").remove();
-  $("hr").remove();
+  reset();
 
-  global_i = 0;
-  song_names = [];
-  spotify_obj = [];
   playlist_len = data.items.length;
 
   console.log(`The number of songs is ${playlist_len}`);
@@ -205,7 +222,9 @@ function appendSpotifyList(data) {
   if(global_i < playlist_len-1) {
     $('#spotify-list').append('<hr>');
   } else {
-    $('#youtube-list').css('display', 'block');
+    $('#results-num').text(`${playlist_len} songs in playlist`);
+    $('#youtube-list').addClass('show-list');
+    $('#toggle-yt-list').addClass('show-toggle');
     $('#spotify-list').css('display', 'block');
     $('#spotify-export').css('display', 'block');
     $('footer').removeClass('fixed-footer');
@@ -256,8 +275,6 @@ function getAllSongUri() {
   let uris = '';
 
   for(let i=0; i<playlist_len; i++) {
-    console.log(spotify_obj[i].valid);
-
     if(spotify_obj[i].valid) {
       if(i > 0 && uris != '')
         uris += ',';
@@ -291,15 +308,37 @@ function addSongs() {
 }
 
 function completeConversion(data) {
+  $('#spotify-success').text('Successfully exported');
   console.log(`Songs successfully added`);
 }
 
 function checkboxListener() {
   $('ul').on('click', 'input', function(event) {
-    console.log($(this).attr('data-index'));
     let index = parseInt($(this).attr('data-index'));
     spotify_obj[index].valid = !spotify_obj[index].valid;
-    console.log(spotify_obj);    $(this).closest('li').find('div').first().toggleClass('invalid-overlay');
+
+    $(this).closest('li').find('div').first().toggleClass('invalid-overlay');
+  });
+}
+
+function youtubePlaylistToggle() {
+  $('#toggle-yt-list').on('click', function(event) {
+    if( $('#youtube-list').css('display') === "none")
+      $('#youtube-list').css('display','block');
+    else
+      $('#youtube-list').css('display', 'none');
+  });
+}
+
+function youtubeFocusListener() {
+  $('#youtube-url').on('focus', function(event) {
+    $('#youtube-error').text('');
+  });
+}
+
+function spotifyFocusListener() {
+  $('#playlist-name').on('focus', function(event) {
+    $('#spotify-success').text('');
   });
 }
 
@@ -319,6 +358,19 @@ function functionHandler() {
   // This function creates an event listener that handles selecting or
   // deselecting a song from the playlist to be exported
   checkboxListener();
+
+
+  // This function creates an event listener that handles toggling the
+  // youtube list for smaller devices
+  youtubePlaylistToggle();
+
+  // This function creates an event listener that handles clearing the
+  // error message for youtube search
+  youtubeFocusListener();
+
+  // This function creates an event listener that handles clearing the
+  // success message for spotify export
+  spotifyFocusListener();
 }
 
 $(functionHandler);

@@ -17,8 +17,9 @@ nav {
   height: 80px;
   width: 100%;
   font-weight: 800;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.9);
   color: white;
+  z-index: 600;
 }
 
 nav a {
@@ -92,10 +93,10 @@ form {
   margin: 15px;
 }
 
-ul {
+#playlists ul {
   margin-bottom: 15px;
   border: 1px solid #191414;
-  width: 40%;
+  width: 45%;
 }
 
 #youtube-list, #spotify-list, #spotify-export {
@@ -122,13 +123,35 @@ li {
   text-align: center;
 }
 
+.instructions {
+  display: none;
+  color: white;
+  font-size: 1.5em;
+}
+
 .song-name {
   width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #playlists {
+  padding: 0 5%;
+  width: 100%;
+}
+
+#search-results {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+}
+
+#youtube-list, #spotify-list {
+  border-radius: 3px;
+}
+
+.bolder {
+  font-weight: 800;
 }
 
 .thumbnail {
@@ -152,6 +175,87 @@ hr {
   align-items: center;
 }
 
+#youtube-search, #spotify-export {
+  width: 70%;
+  text-align: center;
+}
+
+input[type="text"], button[type="submit"] {
+  padding: 5px 10px;
+  color: white;
+  border: none;
+  border-radius: 3px;
+}
+
+input[type="text"] {
+  width: 80%;
+  background: #191414;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #191414 inset;
+  -webkit-text-fill-color: white !important;
+}
+
+button[type="submit"] {
+  background: #1db954;
+}
+
+#youtube-search input {
+  padding: 5px 10px;
+}
+
 input[type="checkbox"] {
   z-index: 500;
+}
+
+form p {
+  margin-top: 5px;
+}
+
+#youtube-error {
+  color: red;
+}
+
+#spotify-success {
+  color: #1db954;
+}
+
+#toggle-yt-list {
+  display: none;
+}
+
+@media all and (max-width:767px) {
+  .instructions { font-size: 1em; }
+
+  #youtube-search, #spotify-export { width: 100%; }
+
+  #playlists { padding: 0; }
+
+  #playlists ul { width: 100% !important; }
+
+  #search-results { flex-direction: column; }
+
+  #toggle-yt-list {
+    margin: 15px 0;
+    padding: 5px 10px;
+    width: 200px;
+    border: 1px solid #191414;
+    border-radius: 3px;
+    background: #dedede;
+  }
+
+  .show-toggle {
+    display: block !important;
+  }
+}
+
+@media all and (min-width: 768px) {
+  .show-list {
+    display: block !important;
+  }
+
+  #results-num {
+    margin-bottom: 15px;
+  }
 }

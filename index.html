@@ -22,6 +22,13 @@
 
     <div class="bg-wrapper">
       <h2>Convert your Youtube playlists into Spotify playlists</h2>
+      <ul class="instructions">
+        <li>1. Enter a valid playlist url to the search bar</li>
+        <li>2. Select/deselect songs to export</li>
+        <li>3. Name the playlist and export</li>
+        <li><p><span class="bolder">Warning</span>: there might be some discrepencies. Please unselect the song if so</p></li>
+        <li><p><span class="bolder">Note</span>: Please use official song titles for most optimal results</p></li>
+      </ul>
     </div>
 
     <main role="main">
@@ -36,16 +43,22 @@
         <form id="youtube-search">
           <input id="youtube-url" type="text" placeholder="Youtube playlist url..." required>
           <button type="submit">Search</button>
+          <p id='youtube-error'></p>
         </form>
         <form id="playlists">
-          <ul id="youtube-list">
-          </ul>
-          <ul id="spotify-list">
-          </ul>
+          <div id="results-num" aria-live="assertive"></div>
+          <div id="search-results">
+            <button id="toggle-yt-list" type="button">Show Youtube Playlist</button>
+            <ul id="youtube-list">
+            </ul>
+            <ul id="spotify-list">
+            </ul>
+          </div>
         </form>
         <form id="spotify-export">
           <input id="playlist-name" type="text" placeholder="Spotify playlist name..." required>
           <button type="submit">Export</button>
+          <p id="spotify-success"></p>
         </form>
       </section>
     </main>
