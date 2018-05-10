@@ -8,20 +8,27 @@ const CB_URL = 'http%3A%2F%2F192.168.1.207%3A8000';
 
 let user_id = '';
 let token = '';
+let yt_playlist_id = '';
+let playlist_len = 0;
+let selected_songs = 0;
+let global_i = 0;
+
 let playlist_id = '';
 let song_names = [];
 let spotify_obj = [];
-let playlist_len = 0;
-let global_i = 0;
+
 
 function reset() {
   $("#playlists li").remove();
   $("hr").remove();
-  $('#results-num').text('');
 
+  playlist_len = 0;
   song_names = [];
   spotify_obj = [];
   global_i = 0;
+
+  $('#youtube-error').css('color', 'coral');
+  $('#youtube-error').text('Loading...');
 }
 
 function requestUserId(auth_token) {
@@ -42,7 +49,7 @@ function requestUserId(auth_token) {
 
 function getUserId(data) {
   user_id = data.id;
-  console.log(`The id is ${user_id}`);
+  console.debug(`The id is ${user_id}`);
 }
 
 function initHTML() {
@@ -69,8 +76,8 @@ function initHTML() {
     token = _token;
     user_id = requestUserId(token);
 
-    console.log(`This token will expire in ${hash.expires_in} seconds`);
-    console.log(`The token is ${token}`);
+    console.debug(`This token will expire in ${hash.expires_in} seconds`);
+    console.debug(`The token is ${token}`);
 
     $('#login').text('Profile');
     $('#login').attr('href', 'https://www.spotify.com/us/account/overview/');
@@ -96,20 +103,20 @@ function youtubeSearch() {
   $('#youtube-search').submit(function(event) {
     event.preventDefault();
 
-    console.log(getParameterByName('list'));
+    yt_playlist_id = getParameterByName('list');
 
     const query = {
       part: 'snippet,contentDetails',
       key: YOUTUBE_API_KEY,
-      maxResults: 10,
-      playlistId: getParameterByName('list')
+      maxResults: 50,
+      playlistId: yt_playlist_id
     }
 
-    $.getJSON(YOUTUBE_URL, query, showYoutubeList)
+    $.getJSON(YOUTUBE_URL, query, startYoutubeList)
       .fail(function(error) {
         switch(error.status) {
           case 403:
-            console.log('playlistItemsNotAccessible');
+            console.debug('playlistItemsNotAccessible');
             $('#youtube-error').text('Playlist cannot be accessed (private or watch later playlist)');
             break;
           case 404:
@@ -120,34 +127,65 @@ function youtubeSearch() {
   });
 }
 
-function showYoutubeList(data) {
-  console.log(data);
+function startYoutubeList(data) {
+  console.debug(data);
 
-  reset();
+  if(data.prevPageToken == undefined) {
+    reset();
+  }
 
-  playlist_len = data.items.length;
+  let len = data.items.length;
+  playlist_len += data.items.length;
+  let pageToken = data.nextPageToken || "";
 
-  console.log(`The number of songs is ${playlist_len}`);
+  console.debug(`The number of songs is ${playlist_len}`);
+  $('#youtube-error').text('Loading...');
 
-  for(let i=0; i<playlist_len; i++) {
+  if($('#results-num').text() !== '')
+    $('#results-num').text(`${data.pageInfo.totalResults} songs in playlist`);
+
+  for(let i=0; i<len; i++) {
     let title = data.items[i].snippet.title;
     let thumbnail_url = data.items[i].snippet.thumbnails.default.url;
 
     $('#youtube-list').append(`
       <li>
-        <div class="song-number">${i+1}</div>
+        <div class="song-number">${playlist_len - data.items.length + i + 1}</div>
         <img class="thumbnail" src='${thumbnail_url}' alt="Youtube Thumbnail">
         <div class="song-name">${title}</div>
       </li>
     `);
 
-    if(i < playlist_len-1)
+    if(playlist_len - data.items.length + i < data.pageInfo.totalResults - 1)
       $('#youtube-list').append('<hr>');
 
     song_names.push(title);
   }
 
-  spotifySearch(song_names[global_i]);
+  if(pageToken != "") {
+    const query = {
+      part: 'snippet,contentDetails',
+      key: YOUTUBE_API_KEY,
+      maxResults: 50,
+      playlistId: yt_playlist_id,
+      pageToken: pageToken
+    }
+
+    $.getJSON(YOUTUBE_URL, query, startYoutubeList)
+      .fail(function(error) {
+        switch(error.status) {
+          case 403:
+            console.debug('playlistItemsNotAccessible');
+            $('#youtube-error').text('Playlist cannot be accessed (private or watch later playlist)');
+            break;
+          case 404:
+            $('#youtube-error').text('Playlist not found');
+            break;
+        }
+    });
+  } else {
+    spotifySearch(song_names[global_i]);
+  }
 }
 
 function spotifySearch(raw_song) {
@@ -157,7 +195,7 @@ function spotifySearch(raw_song) {
     .replace('(Audio)', '')
     .replace(/(ft\.(.*))/g, '');
     //.replace(/(Prod By(.*))/g, '');
-  // console.log(song);
+  // console.debug(song);
 
   $.ajax({
   	url: `https://api.spotify.com/v1/search?q=${encodeURIComponent(song)}&type=track&limit=1&offset=0`,
@@ -176,7 +214,7 @@ function spotifySearch(raw_song) {
 
 function appendSpotifyList(data) {
   let json = JSON.stringify(data, null, '\t');
-  // console.log(data);
+  // console.debug(data);
 
   let result = data.tracks.items[0];
   let title = "";
@@ -201,16 +239,18 @@ function appendSpotifyList(data) {
         <div class="song-number">${global_i+1}</div>
         <img class="thumbnail" src='${spotify_obj[global_i].thumbnail_url}' alt="Spotify Album Thumbnail">
         <div class="song-name">${spotify_obj[global_i].name}</div>
-        <input data-index= ${global_i} type="checkbox" checked>
+        <input data-index= ${global_i} type="checkbox" aria-label="Song (${spotify_obj[global_i].name}) checkbox" checked>
       </li>
     `);
+
+    selected_songs++;
   } else {
     spotify_obj.push({
       valid: false,
     })
 
     $('#spotify-list').append(`
-      <li>
+      <li class="invalid">
         <div class="invalid-overlay"></div>
         <div class="song-number">${global_i+1}</div>
         <img class="thumbnail" src='images/no_image.jpg' alt="Invalid Album Cover">
@@ -222,6 +262,8 @@ function appendSpotifyList(data) {
   if(global_i < playlist_len-1) {
     $('#spotify-list').append('<hr>');
   } else {
+    $('#youtube-error').text('');
+    $('#youtube-error').css('color', '');
     $('#results-num').text(`${playlist_len} songs in playlist`);
     $('#youtube-list').addClass('show-list');
     $('#toggle-yt-list').addClass('show-toggle');
@@ -229,12 +271,22 @@ function appendSpotifyList(data) {
     $('#spotify-export').css('display', 'block');
     $('footer').removeClass('fixed-footer');
 
-    console.log(spotify_obj);
+    validateExport();
+
+    console.debug(spotify_obj);
   }
 
   global_i++;
-  if(global_i < playlist_len)
+  if(global_i < playlist_len) {
     spotifySearch(song_names[global_i]);
+  }
+}
+
+function validateExport() {
+  if(selected_songs == 0)
+    $('#spotify-export input, #spotify-export button').prop('disabled', true).addClass('disabled');
+  else
+    $('#spotify-export input, #spotify-export button').prop('disabled', false).removeClass('disabled');
 }
 
 function createPlaylist() {
@@ -265,8 +317,8 @@ function createPlaylist() {
 
 function getPlaylistId(data) {
   playlist_id = data.id;
-  console.log(`Playlist successfully created`);
-  console.log(data);
+  console.debug(`Playlist successfully created`);
+  console.debug(data);
 
   addSongs();
 }
@@ -286,10 +338,10 @@ function getAllSongUri() {
 }
 
 function addSongs() {
-  console.log('Adding songs');
+  console.debug('Adding songs');
 
   let uris = getAllSongUri();
-  console.log(uris);
+  console.debug(uris);
 
   $.ajax({
     url: `https://api.spotify.com/v1/users/${user_id}/playlists/${playlist_id}/tracks?uris=${uris}`,
@@ -303,20 +355,30 @@ function addSongs() {
     type: 'POST'
   }).fail(function(error) {
     // handle failed api requests
+    if(uris === '')
+      console.debug('Empty playlist');
     console.log(error);
   });
 }
 
 function completeConversion(data) {
   $('#spotify-success').text('Successfully exported');
-  console.log(`Songs successfully added`);
+  console.debug(`Songs successfully added`);
 }
 
 function checkboxListener() {
   $('ul').on('click', 'input', function(event) {
     let index = parseInt($(this).attr('data-index'));
-    spotify_obj[index].valid = !spotify_obj[index].valid;
 
+    if(spotify_obj[index].valid) {
+      selected_songs--;
+    } else {
+      selected_songs++;
+    }
+
+    validateExport();
+
+    spotify_obj[index].valid = !spotify_obj[index].valid;
     $(this).closest('li').find('div').first().toggleClass('invalid-overlay');
   });
 }
@@ -332,7 +394,8 @@ function youtubePlaylistToggle() {
 
 function youtubeFocusListener() {
   $('#youtube-url').on('focus', function(event) {
-    $('#youtube-error').text('');
+    if($('#youtube-error').text() != 'Loading...')
+      $('#youtube-error').text('');
   });
 }
 
@@ -344,7 +407,7 @@ function spotifyFocusListener() {
 
 function functionHandler() {
   // This function handles what content is displayed based on if a user has
-  // logged in or not
+  // debugged in or not
   initHTML();
 
   // This function creates an event listener that handles an API call to get
