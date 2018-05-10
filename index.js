@@ -5,7 +5,7 @@ const YOUTUBE_URL = 'https://www.googleapis.com/youtube/v3/playlistItems';
 const YOUTUBE_API_KEY = 'AIzaSyBgV3q8M71c-Hkqh3VmKzJSDlnoidrmuzM';
 
 const CB_URL = 'https://192.168.1.207:8000';
-const DP_URL = 'https://ohjamesho.com/playlist-converter'
+const DP_URL = 'http://ohjamesho.com/playlist-converter'
 
 let user_id = '';
 let token = '';
