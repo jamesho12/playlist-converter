@@ -140,6 +140,9 @@ function startYoutubeList(data) {
 
   console.debug(`The number of songs is ${playlist_len}`);
   $('#youtube-error').text('Loading...');
+  $('#results-num').text(`${playlist_len} songs in playlist`);
+  $('#youtube-list').addClass('show-list');
+  $('#toggle-yt-list').addClass('show-toggle');
 
   if($('#results-num').text() !== '')
     $('#results-num').text(`${data.pageInfo.totalResults} songs in playlist`);
@@ -264,9 +267,6 @@ function appendSpotifyList(data) {
   } else {
     $('#youtube-error').text('');
     $('#youtube-error').css('color', '');
-    $('#results-num').text(`${playlist_len} songs in playlist`);
-    $('#youtube-list').addClass('show-list');
-    $('#toggle-yt-list').addClass('show-toggle');
     $('#spotify-list').css('display', 'block');
     $('#spotify-export').css('display', 'block');
     $('footer').removeClass('fixed-footer');

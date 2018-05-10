@@ -44,7 +44,7 @@ header a:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 80px 20px 20px;
+  padding: 80px 20px 0;
   height: 60vh;
   background: url(https://hdwallsource.com/img/2014/11/music-wallpaper-41678-42656-hd-wallpapers.jpg);
   background-size: cover;
@@ -82,7 +82,7 @@ footer {
 .fixed-footer {
   position: absolute;
   bottom: 0;
-  width: 100vw;
+  width: 100%;
 }
 
 footer p {
@@ -147,7 +147,6 @@ li {
 }
 
 #playlists {
-  padding: 0 5%;
   width: 100%;
 }
 
@@ -248,9 +247,9 @@ form p {
 @media all and (max-width:767px) {
   .instructions { font-size: 1em; }
 
-  #youtube-search, #spotify-export { width: 100%; }
+  .instructions li { padding: 5px; }
 
-  #playlists { padding: 0; }
+  #youtube-search, #spotify-export { width: 100%; }
 
   #playlists ul { width: 100% !important; }
 
@@ -265,13 +264,9 @@ form p {
     background: #dedede;
   }
 
-  input[type="text"] {
-    width: 70%;
-  }
+  input[type="text"] { width: 70%; }
 
-  .show-toggle {
-    display: block !important;
-  }
+  .show-toggle { display: block !important; }
 }
 
 @media all and (min-width: 768px) {
@@ -286,4 +281,19 @@ form p {
 
 .invalid {
   color: white;
+}
+
+@media all and (min-width:920px) and (max-width:1199px){
+  header > a { margin-left: 10%; }
+  nav { padding: 0 10%; }
+  section { padding: 20px 10%; }
+  .bg-wrapper { padding: 80px 10% 0; }
+}
+
+
+@media all and (min-width:1200px) {
+  header > a { margin-left: 20%; }
+  nav { padding: 0 20%; }
+  section { padding: 20px 20%; }
+  .bg-wrapper { padding: 80px 20% 0; }
 }
