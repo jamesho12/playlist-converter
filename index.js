@@ -4,7 +4,8 @@ const SPOTIFY_API_KEY = '5b438a66581e4737acfddeb0d2bd063b';
 const YOUTUBE_URL = 'https://www.googleapis.com/youtube/v3/playlistItems';
 const YOUTUBE_API_KEY = 'AIzaSyBgV3q8M71c-Hkqh3VmKzJSDlnoidrmuzM';
 
-const CB_URL = 'http%3A%2F%2F192.168.1.207%3A8000';
+const CB_URL = 'https://192.168.1.207:8000';
+const DP_URL = 'https://ohjamesho.com/playlist-converter'
 
 let user_id = '';
 let token = '';
@@ -70,7 +71,7 @@ function initHTML() {
     let scopes = encodeURIComponent('playlist-modify-public playlist-modify-private');
 
     $('#login').text('Log In');
-    $('#login').attr('href', `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_API_KEY}&response_type=token&redirect_uri=${CB_URL}&scope=${scopes}`);
+    $('#login').attr('href', `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_API_KEY}&response_type=token&redirect_uri=${encodeURIComponent(DP_URL)}&scope=${scopes}`);
     $('#intro-screen').css('display', 'flex');
   } else {
     token = _token;

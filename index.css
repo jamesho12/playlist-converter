@@ -45,6 +45,7 @@ header a:hover {
   justify-content: center;
   align-items: center;
   padding: 80px 20px 0;
+  min-height: 300px;
   height: 60vh;
   background: url(https://hdwallsource.com/img/2014/11/music-wallpaper-41678-42656-hd-wallpapers.jpg);
   background-size: cover;
@@ -63,7 +64,8 @@ section {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  min-height: calc(40vh - 46px);
+  min-height: 220px;
+  height: calc(40vh - 46px);
   padding: 20px;
 }
 
@@ -83,6 +85,10 @@ footer {
   position: absolute;
   bottom: 0;
   width: 100%;
+}
+
+@media all and (orientation:landscape) {
+  .fixed-footer { bottom: auto; }
 }
 
 footer p {
