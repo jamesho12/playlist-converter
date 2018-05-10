@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
@@ -11,16 +11,16 @@
     <title>Playlist Converter</title>
   </head>
   <body>
-    <nav role="navigation">
-      <header role="banner">
-        <a href="#">
-          <h1>Playlist Converter</h1>
-        </a>
-      </header>
-      <a id="login" href="#"></a>
-    </nav>
+    <header role="banner">
+      <a href="#">
+        <h1>Playlist Converter</h1>
+      </a>
+      <nav role="navigation">
+        <a id="login" href="#"></a>
+      </nav>
+    </header>
 
-    <div class="bg-wrapper">
+    <section class="bg-wrapper" role="region">
       <h2>Convert your Youtube playlists into Spotify playlists</h2>
       <ul class="instructions">
         <li>1. Enter a valid playlist url to the search bar</li>
@@ -29,7 +29,7 @@
         <li><p><span class="bolder">Warning</span>: there might be some discrepencies. Please unselect the song if so</p></li>
         <li><p><span class="bolder">Note</span>: Please use official song titles for most optimal results</p></li>
       </ul>
-    </div>
+    </section>
 
     <main role="main">
       <section id="intro-screen" role="region">
@@ -41,8 +41,8 @@
 
       <section id="logged-screen" role="region">
         <form id="youtube-search">
-          <input id="youtube-url" type="text" placeholder="Youtube playlist url..." required>
-          <button type="submit">Search</button>
+          <input id="youtube-url" type="text" placeholder="Youtube playlist url..." aria-label="Youtube Playlist Search URL" required>
+          <button type="submit" aria-label="Youtube Playlist Search Submit">Search</button>
           <p id='youtube-error'></p>
         </form>
         <form id="playlists">
@@ -56,14 +56,14 @@
           </div>
         </form>
         <form id="spotify-export">
-          <input id="playlist-name" type="text" placeholder="Spotify playlist name..." required>
-          <button type="submit">Export</button>
+          <input id="playlist-name" type="text" placeholder="Spotify playlist name..." aria-label="Spotify Playlist Name"required>
+          <button type="submit" aria-label="Spotify Playlist Export">Export</button>
           <p id="spotify-success"></p>
         </form>
       </section>
     </main>
 
-    <footer class="fixed-footer" role="contentInfo">
+    <footer class="fixed-footer" role="contentinfo">
       <p>Created by James Ho</p>
     </footer>
 
