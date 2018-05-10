@@ -1,6 +1,6 @@
 # Playlist Converter 
 
-A simple tool to convert a Youtube playlist to a Spotify playlist on your account. A link to the live application can be found [here](http://ohjamesho.com/playlist-converter){target:"_blank"}
+A simple tool to convert a Youtube playlist to a Spotify playlist on your account. A link to the live application can be found [here](http://ohjamesho.com/playlist-converter){:target="_blank"}
 
 ## Motivation
 
