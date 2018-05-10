@@ -87,7 +87,7 @@ footer {
   width: 100%;
 }
 
-@media all and (orientation:landscape) {
+@media all and (max-width: 767px) and (orientation:landscape) {
   .fixed-footer { bottom: auto; }
 }
 
