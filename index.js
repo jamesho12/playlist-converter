@@ -142,6 +142,7 @@ function startYoutubeList(data) {
   console.debug(`The number of songs is ${playlist_len}`);
   $('#youtube-error').text('Loading...');
   $('#results-num').text(`${playlist_len} songs in playlist`);
+  $('section').css('height', 'auto');
   $('#youtube-list').addClass('show-list');
   $('#toggle-yt-list').addClass('show-toggle');
 
