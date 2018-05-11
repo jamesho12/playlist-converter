@@ -5,6 +5,7 @@ A simple tool to convert a Youtube playlist to a Spotify playlist on your accoun
 A demo account has been made for people without Spotify or reluctant to sign in to their own account. 
 
 **email**: developer.playlistconverter@gmail.com
+
 **password**: testAccount0
 
 ## Motivation
