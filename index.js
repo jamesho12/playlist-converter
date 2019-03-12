@@ -151,7 +151,7 @@ function startYoutubeList(data) {
 
   for(let i=0; i<len; i++) {
     let title = data.items[i].snippet.title;
-    let thumbnail_url = data.items[i].snippet.thumbnails.default.url || '';
+    let thumbnail_url = data.items[i].snippet.thumbnails.default.url || "https://www.freeiconspng.com/uploads/no-image-icon-21.png";
 
     $('#youtube-list').append(`
       <li>
