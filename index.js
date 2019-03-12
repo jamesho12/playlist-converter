@@ -195,13 +195,12 @@ function startYoutubeList(data) {
         }
     });
   } else {
+    console.debug(song_names);
     spotifySearch(song_names[global_i]);
   }
 }
 
-function spotifySearch(raw_song) {
-  console.debug(raw_song)
-  
+function spotifySearch(raw_song) {  
   let song = raw_song
     .replace(/([\(|\[]Official(.*))/g, '')
     .replace(/([\(|\[](.*))/g, '')
