@@ -210,6 +210,9 @@ function spotifySearch(raw_song) {
     .replace(/(ft\.(.*))/g, '');
     //.replace(/(Prod By(.*))/g, '');
   // console.debug(song);
+  
+  if (raw_song == '[Electro] - Puppet & The Eden Project - The Fire [Monstercat Release]') 
+    song = 'Puppet & The Eden Project - The Fire';
 
   $.ajax({
   	url: `https://api.spotify.com/v1/search?q=${encodeURIComponent(song)}&type=track&limit=1&offset=0`,
