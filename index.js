@@ -205,7 +205,7 @@ function spotifySearch(raw_song) {
   
   let song = raw_song
     .replace(/([\(|\[]Official(.*))/g, '')
-    .replace(/(\[(.*?)\]|\((.*?)\))/g, '')    
+    .replace(/(\[(.*?)\]|\((.*?)\)|\|(.*?)\|)/g, '')    
     .replace('(Audio)', '')
     .replace(/(ft\.(.*))/g, '')
     .replace(/([\(|\[](.*))/g, '');
