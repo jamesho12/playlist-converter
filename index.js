@@ -201,6 +201,8 @@ function startYoutubeList(data) {
 }
 
 function spotifySearch(raw_song) {  
+  console.debug(`Global index is ${globa_i} Current song is ${raw_song}.`);
+  
   let song = raw_song
     .replace(/([\(|\[]Official(.*))/g, '')
     .replace(/([\(|\[](.*))/g, '')
