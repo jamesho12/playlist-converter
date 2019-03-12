@@ -200,9 +200,7 @@ function startYoutubeList(data) {
   }
 }
 
-function spotifySearch(raw_song) {  
-  console.debug(`Global index is ${global_i}, current song should be ${song_names[global_i]} but is ${raw_song}.`);
-  
+function spotifySearch(raw_song) {     
   let song = raw_song
     .replace(/([\(|\[]Official(.*))/g, '')
     .replace(/(\[(.*?)\]|\((.*?)\)|\|(.*?)\|)/g, '')    
@@ -211,6 +209,8 @@ function spotifySearch(raw_song) {
     .replace(/([\(|\[](.*))/g, '');
     //.replace(/(Prod By(.*))/g, '');
   // console.debug(song);
+  
+  console.debug(`Global index is ${global_i}, current song should be ${song_names[global_i]} but is ${song}.`);
   
   if (raw_song == `[Electro] - Puppet & The Eden Project - The Fire [Monstercat Release]`) 
     song = `Puppet & The Eden Project - The Fire`;
