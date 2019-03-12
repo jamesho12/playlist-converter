@@ -214,7 +214,9 @@ function spotifySearch(raw_song) {
   if (raw_song == `[Electro] - Puppet & The Eden Project - The Fire [Monstercat Release]`) 
     song = `Puppet & The Eden Project - The Fire`;
   else if (raw_song == `[Vietsub + Lyrics] I'm Not Her - Clara Mae`)
-    song = `[Vietsub + Lyrics] I'm Not Her - Clara Mae`
+    song = `I'm Not Her - Clara Mae`
+  else if (raw_song == `[DnB] - Feint - We Won't Be Alone (feat. Laura Brehm) [Monstercat Release]`)
+    song = `Feint - We Won't Be Alone`
 
   $.ajax({
   	url: `https://api.spotify.com/v1/search?q=${encodeURIComponent(song)}&type=track&limit=1&offset=0`,
