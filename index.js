@@ -211,8 +211,10 @@ function spotifySearch(raw_song) {
     //.replace(/(Prod By(.*))/g, '');
   // console.debug(song);
   
-  if (raw_song == '[Electro] - Puppet & The Eden Project - The Fire [Monstercat Release]') 
-    song = 'Puppet & The Eden Project - The Fire';
+  if (raw_song == `[Electro] - Puppet & The Eden Project - The Fire [Monstercat Release]`) 
+    song = `Puppet & The Eden Project - The Fire`;
+  else if (raw_song == `[Vietsub + Lyrics] I'm Not Her - Clara Mae`)
+    song = `[Vietsub + Lyrics] I'm Not Her - Clara Mae`
 
   $.ajax({
   	url: `https://api.spotify.com/v1/search?q=${encodeURIComponent(song)}&type=track&limit=1&offset=0`,
