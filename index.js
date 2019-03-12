@@ -200,6 +200,8 @@ function startYoutubeList(data) {
 }
 
 function spotifySearch(raw_song) {
+  console.debug(raw_song)
+  
   let song = raw_song
     .replace(/([\(|\[]Official(.*))/g, '')
     .replace(/([\(|\[](.*))/g, '')
