@@ -195,13 +195,13 @@ function startYoutubeList(data) {
         }
     });
   } else {
-    console.debug(song_names);
+    // console.debug(song_names);
     spotifySearch(song_names[global_i]);
   }
 }
 
 function spotifySearch(raw_song) {  
-  console.debug(`Global index is ${global_i}, current song should be ${song_names[global_i]} but is ${raw_song}.`);
+  // console.debug(`Global index is ${global_i}, current song should be ${song_names[global_i]} but is ${raw_song}.`);
   
   let song = raw_song
     .replace(/([\(|\[]Official(.*))/g, '')
